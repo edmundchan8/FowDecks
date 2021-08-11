@@ -11,17 +11,20 @@ namespace FowDecks.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
         public string Image { get; set; }
+        [Required]
         public string Type{ get; set; }
+        [Required]
         public string Cost { get; set; }
         [DisplayName("Total Cost")]
         public string TotalCost{ get; set; }
         [DisplayName("Attack")]
-        public int Atk{ get; set; }
+        public int? Atk{ get; set; }
         [DisplayName("Defence")]
-        public int Def{ get; set; }
-        public int Divinity{ get; set; }
+        public int? Def{ get; set; }
+        public int? Divinity{ get; set; }
         public string Race { get; set; }
         public string Attribute { get; set; }
         [DisplayName("Card Text")]
@@ -29,9 +32,12 @@ namespace FowDecks.Models
         [DisplayName("Flavor Text")]
         public string FlavorText{ get; set; }
         [DisplayName("Card Number")]
+        [Required]
         public string CardNumber { get; set; }
+        [Required]
         public string Rarity{ get; set; }
         public string Artist{ get; set; }
+        [Required]
         public string Set{ get; set; }
         public string Format { get; set; }
 

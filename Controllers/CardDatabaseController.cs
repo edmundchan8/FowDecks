@@ -33,15 +33,19 @@ namespace FowDecks.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Card card)
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
                 _db.Add(card);
                 _db.SaveChanges();
-                RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
-            return View();
+            else 
+            {
+                return View(card);
+            }
         }
     }
 }
