@@ -22,8 +22,7 @@ namespace FowDecks.Controllers
             {
                 Card = null,
                 Cards = _db.Cards
-
-        };
+            };
             return View(cardDbViewModel);
         }
 
