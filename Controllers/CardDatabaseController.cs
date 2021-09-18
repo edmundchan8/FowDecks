@@ -45,7 +45,7 @@ namespace FowDecks.Controllers
 
                 var cardName = "";
                 var cardType = "";
-                var text = "";
+                var cardText = "";
 
                 if (!String.IsNullOrEmpty(cardDBVM.Card.Name))
                     cardName = cardDBVM.Card.Name;
@@ -54,10 +54,10 @@ namespace FowDecks.Controllers
                     cardType = cardDBVM.Card.Type;
 
                 if(!String.IsNullOrEmpty(cardDBVM.Card.CardText))
-                    text = cardDBVM.Card.CardText;
+                    cardText = cardDBVM.Card.CardText;
 
 
-                cardDBVM.Cards = cards.Where(c => c.CardText.Contains(text)
+                cardDBVM.Cards = cards.Where(c => c.CardText.Contains(cardText)
                     && c.Name.Contains(cardName)
                     && c.Type.Contains(cardType));
                 
