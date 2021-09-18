@@ -69,3 +69,24 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+/* Card Styling for Index page
+-------------------------------------------------- */
+
+.card-img-top {
+    width: 130px;
+}
+
+.card-title {
+    text-align: center;
+}
+
+.card-horizontal {
+    display: flex;
+}
+
+.card-text {
+    max-height: 150px;
+    overflow-y: auto;
+    font-size: 13px;
+}
