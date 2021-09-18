@@ -8,6 +8,7 @@ using FowDecks.ViewModels;
 using FowDecks.Data;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace FowDecks.Controllers
 {
@@ -22,15 +23,54 @@ namespace FowDecks.Controllers
         }
         public int MyProperty { get; set; }
 
+        [HttpGet]
         public IActionResult Index()
         {
             CardDatabaseViewModel cardDbViewModel = new()
             {
                 Card = null,
-                Cards = _db.Cards
+                Cards = null
             };
             return View(cardDbViewModel);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(CardDatabaseViewModel cardDBVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var cards = from allCards in _db.Cards
+                            select allCards;
+
+                var cardName = "";
+                var cardType = "";
+                var cardText = "";
+
+                if (!String.IsNullOrEmpty(cardDBVM.Card.Name))
+                    cardName = cardDBVM.Card.Name;
+
+                if (!String.IsNullOrEmpty(cardDBVM.Card.Type))
+                    cardType = cardDBVM.Card.Type;
+
+                if(!String.IsNullOrEmpty(cardDBVM.Card.CardText))
+                    cardText = cardDBVM.Card.CardText;
+
+
+                cardDBVM.Cards = cards.Where(c => c.CardText.Contains(cardText)
+                    && c.Name.Contains(cardName)
+                    && c.Type.Contains(cardType));
+                
+                return View(cardDBVM);
+            }
+            else 
+            {
+                cardDBVM.Card = null;
+                cardDBVM.Cards = null;
+            }
+                return View(cardDBVM);
+        }
+
 
         [HttpGet]
         public IActionResult Create()
