@@ -31,6 +31,7 @@ namespace FowDecks.Controllers
                 Card = null,
                 Cards = null
             };
+
             return View(cardDbViewModel);
         }
 
@@ -71,6 +72,11 @@ namespace FowDecks.Controllers
                 return View(cardDBVM);
         }
 
+        [HttpPost]
+        public IActionResult GetCardName([FromBody]Card card)
+        {
+            return Json(card.Name);
+        }
 
         [HttpGet]
         public IActionResult Create()
