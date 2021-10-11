@@ -31,6 +31,7 @@ namespace FowDecks.Controllers
                 Card = null,
                 Cards = null
             };
+
             return View(cardDbViewModel);
         }
 
@@ -71,6 +72,20 @@ namespace FowDecks.Controllers
                 return View(cardDBVM);
         }
 
+        [HttpPost]
+        public JsonResult GetCardName([FromBody]Card cardInput)
+        {
+            IQueryable<Card> cardsFound = from c in _db.Cards
+                                             select c;
+            if (!String.IsNullOrEmpty(cardInput.Name))
+            {
+                cardsFound = cardsFound.Where(s => s.Name.Contains(cardInput.Name));
+            }
+
+            Console.Write(cardsFound);
+
+            return Json(cardsFound);
+        }
 
         [HttpGet]
         public IActionResult Create()

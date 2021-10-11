@@ -11,9 +11,14 @@
                     <div class="row">
                         <div class="col-12">
                             <label asp-for="@Model.Card.Name"></label>
-                            <input asp-for="@Model.Card.Name" class="form-control" />
+                            <input asp-for="@Model.Card.Name" class="form-control" id="card-name" />
+                            <div id="test"></div>
+                            <div>
+                                <ul id="card-list"></ul>
+                            </div>
                             <a class="btn btn-light mt-3" data-toggle="collapse" data-target="#collapseOne">Advanced Filters</a>
                         </div>
+
                     </div>
                     <div class="row collapse" id="collapseOne">
                         <div class="col-12">
@@ -114,27 +119,68 @@
     @if (Model.Cards != null || Model.Card != null && Model.Cards.Count() > 0)
     {
         <div class="card-group row rounded p-1 mb-3">
-        @foreach (var card in Model.Cards)
-        {
-            var photoPath = "/images/" + (card.Image ?? "fow-cardback.jpg");
-            <div class="col-md-4">
-                <div class="card p-1">
-                    <h6 class="card-title">@card.Name</h6>
-                    <div class="card-horizontal">
-                        <img class="card-img-top" src="@photoPath" alt="Card image">
-                        <div class="card-body img-fluid">
-                            <p class="card-text">
-                                @card.CardText
-                            </p>
+            @foreach (var card in Model.Cards)
+            {
+                var photoPath = "/images/" + (card.Image ?? "fow-cardback.jpg");
+                <div class="col-md-4">
+                    <div class="card p-1">
+                        <h6 class="card-title">@card.Name</h6>
+                        <div class="card-horizontal">
+                            <img class="card-img-top" src="@photoPath" alt="Card image">
+                            <div class="card-body img-fluid">
+                                <p class="card-text">
+                                    @card.CardText
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
         </div>
     }
     else
     {
-    <h6>0 Cards to Show</h6>
+        <h6>0 Cards to Show</h6>
     }
-    </form>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#card-name').on('input', function () {
+            var word = $('#card-name').val();
+            var data = JSON.stringify({
+                name: word
+            });
+            console.log(data);
+            console.log(word);
+            $.ajax({
+                url: '/CardDatabase/GetCardName',
+                type: 'POST',
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                // on success response
+                success: function (response)
+                {
+                    $("#card-list").html("");
+                    //Need to refresh the list each time a new input is put in
+                    if (response.length > 0) {
+                        $.each(response, function (index, item) {
+                            $("#card-list").append('<li>' + item.name + '</li>');
+                        });
+                    }
+                    else if (response == "") {
+                        $("#card-list").html("");
+                        console.log(repsonse.length);
+                    }
+                    else {
+                        $("#card-list").html("No cards found");
+                    }
+                },
+                error: function (xhr) {
+                    alert("Some error encountered." + xhr.status);
+                }
+            });
+        });
+    })
+</script>
