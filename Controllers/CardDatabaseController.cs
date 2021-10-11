@@ -73,9 +73,18 @@ namespace FowDecks.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetCardName([FromBody]Card card)
+        public JsonResult GetCardName([FromBody]Card cardInput)
         {
-            return Json(card.Name);
+            IQueryable<Card> cardsFound = from c in _db.Cards
+                                             select c;
+            if (!String.IsNullOrEmpty(cardInput.Name))
+            {
+                cardsFound = cardsFound.Where(s => s.Name.Contains(cardInput.Name));
+            }
+
+            Console.Write(cardsFound);
+
+            return Json(cardsFound);
         }
 
         [HttpGet]
