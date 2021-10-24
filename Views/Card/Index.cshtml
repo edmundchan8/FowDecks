@@ -1,0 +1,22 @@
+﻿@model FowDecks.Models.Card
+
+
+<h1>@Model.Name</h1>
+<img src="~/images/@Model.Image" />
+<p>Card Type: @Model.Type</p>
+<p>Race: @Model.Race</p>
+<p>Card Number: @Model.CardNumber</p>
+<p>Attack: @Model.Atk</p>
+<p>Defence: @Model.Def</p>
+<p>Card Text: @Model.CardText</p>
+<p>Card Cost: @Model.Cost</p>
+<p>Card Total Cost: @Model.TotalCost</p>
+@if (Model.Divinity > 0) {
+    <p>Divinity: @Model.Divinity</p>
+    }
+<p>Attribute: @Model.Attribute</p>
+<p>Rarity: @Model.Rarity</p>
+<p>Artist: @Model.Artist</p>
+<p>Set: @Model.Set</p>
+<p>Game Format: @Model.Format</p>
+<p>Flavor Text: @Model.FlavorText</p>

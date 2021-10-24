@@ -123,18 +123,20 @@
             {
                 var photoPath = "/images/" + (card.Image ?? "fow-cardback.jpg");
                 <div class="col-md-4">
-                    <div class="card p-1">
-                        <h6 class="card-title">@card.Name</h6>
-                        <div class="card-horizontal">
-                            <img class="card-img-top" src="@photoPath" alt="Card image">
-                            <div class="card-body img-fluid">
-                                <p class="card-text">
-                                    @card.CardText
-                                </p>
+                    <a asp-controller="Card" asp-action="Index" asp-route-id="@card.Id">
+                        <div class="card p-1">
+                            <h6 class="card-title">@card.Name</h6>
+                            <div class="card-horizontal">
+                                <img class="card-img-top" src="@photoPath" alt="Card image">
+                                <div class="card-body img-fluid">
+                                    <p class="card-text">
+                                        @card.CardText
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </a>
+               </div>
             }
         </div>
     }
@@ -144,6 +146,8 @@
     }
 </form>
 
+@section Scripts
+{
 <script>
     $(document).ready(function () {
         $('#card-name').on('input', function () {
@@ -184,3 +188,4 @@
         });
     })
 </script>
+}
