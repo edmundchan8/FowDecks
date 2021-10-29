@@ -1,9 +1,9 @@
 ﻿@model FowDecks.ViewModels.CardDatabaseViewModel
 
-<form method="post" asp-action="Index" asp-controller="SearchResults">
+<form method="post" asp-action="Index">
     <div class="p-2">
         <div class="form-group row">
-            <h2 class="text-black-50 pl-3">Card Search</h2>
+            <h2 class="text-black-50 pl-3">Card Search Results</h2>
         </div>
         <div class="row">
             <div class="col-12">
@@ -116,11 +116,44 @@
             </div>
         </div>
     </div>
+    @if (Model != null)
+    {
+        if (Model.Cards != null || Model.Card != null && Model.Cards.Count() > 0)
+        {
+            <div class="card-group row rounded p-1 mb-3">
+                @foreach (var tradingCard in Model.Cards)
+                {
+                    var photoPath = "/images/" + (tradingCard.Image ?? "fow-cardback.jpg");
+                    <div class="col-md-4">
+                        <!-- cannot use A links, has to be button or something else -->
+
+                        <button class="unstyled-button" asp-controller="Card" asp-action="Index" asp-route-Id="@tradingCard.Id">
+                            <div class="card p-1">
+                                <h6 class="card-title">@tradingCard.Name</h6>
+                                <div class="card-horizontal">
+                                    <img class="card-img-top" src="@photoPath" alt="Card image">
+                                    <div class="card-body img-fluid">
+                                        <p class="card-text">
+                                            @tradingCard.CardText
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <h6>0 Cards to Show</h6>
+    }
 </form>
 
 @section Scripts
 {
-<script>
+    <script>
     this.history.forward(-1);
     $(document).ready(function () {
         $('#card-name').on('input', function () {
@@ -159,5 +192,5 @@
             });
         });
     })
-</script>
+    </script>
 }

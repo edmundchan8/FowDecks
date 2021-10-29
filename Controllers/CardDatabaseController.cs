@@ -26,50 +26,12 @@ namespace FowDecks.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            CardDatabaseViewModel cardDbViewModel = new()
+            CardDatabaseViewModel cardViewModel = new() 
             {
                 Card = null,
                 Cards = null
             };
-
-            return View(cardDbViewModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Index(CardDatabaseViewModel cardDBVM)
-        {
-            if (ModelState.IsValid)
-            {
-                var cards = from allCards in _db.Cards
-                            select allCards;
-
-                var cardName = "";
-                var cardType = "";
-                var cardText = "";
-
-                if (!String.IsNullOrEmpty(cardDBVM.Card.Name))
-                    cardName = cardDBVM.Card.Name;
-
-                if (!String.IsNullOrEmpty(cardDBVM.Card.Type))
-                    cardType = cardDBVM.Card.Type;
-
-                if(!String.IsNullOrEmpty(cardDBVM.Card.CardText))
-                    cardText = cardDBVM.Card.CardText;
-
-
-                cardDBVM.Cards = cards.Where(c => c.CardText.Contains(cardText)
-                    && c.Name.Contains(cardName)
-                    && c.Type.Contains(cardType));
-                
-                return View(cardDBVM);
-            }
-            else 
-            {
-                cardDBVM.Card = null;
-                cardDBVM.Cards = null;
-            }
-                return View(cardDBVM);
+                return View(cardViewModel);
         }
 
         [HttpPost]
@@ -81,10 +43,23 @@ namespace FowDecks.Controllers
             {
                 cardsFound = cardsFound.Where(s => s.Name.Contains(cardInput.Name));
             }
-
-            Console.Write(cardsFound);
-
             return Json(cardsFound);
+        }
+
+        [HttpGet]
+        public IActionResult CardView(int? id)
+        {
+            if (id == 0 || id == null) 
+            {
+                return NotFound();
+            }
+
+            Card card = _db.Cards.Find(id);
+            if (card == null) 
+            {
+                return NotFound();
+            }
+            return View(card);
         }
 
         [HttpGet]

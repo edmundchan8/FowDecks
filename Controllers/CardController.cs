@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FowDecks.Models;
+using FowDecks.ViewModels;
 using FowDecks.Data;
 
 namespace FowDecks.Controllers
@@ -15,12 +16,20 @@ namespace FowDecks.Controllers
         {
             _db = db;
         }
+
+        [HttpGet]
+        public IActionResult Index() 
+        {
+            Card card = _db.Cards.Find(TempData["cardId"]);
+            return View(card);
+        }
+
+        [HttpPost]
         public IActionResult Index(int id)
         {
-            Card card = _db.Cards.Where(c => c.Id == id)
-                .FirstOrDefault();
-
-            return View(card);
+            //Check to see if parameter entered is null?
+            TempData["cardId"] = id;
+            return RedirectToAction("Index");
         }
     }
 }
