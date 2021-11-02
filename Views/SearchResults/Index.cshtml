@@ -120,29 +120,28 @@
     {
         if (Model.Cards != null || Model.Card != null && Model.Cards.Count() > 0)
         {
-            <div class="card-group row rounded p-1 mb-3">
-                @foreach (var tradingCard in Model.Cards)
-                {
-                    var photoPath = "/images/" + (tradingCard.Image ?? "fow-cardback.jpg");
-                    <div class="col-md-4">
-                        <!-- cannot use A links, has to be button or something else -->
-
-                        <button class="unstyled-button" asp-controller="Card" asp-action="Index" asp-route-Id="@tradingCard.Id">
-                            <div class="card p-1">
-                                <h6 class="card-title">@tradingCard.Name</h6>
-                                <div class="card-horizontal">
-                                    <img class="card-img-top" src="@photoPath" alt="Card image">
-                                    <div class="card-body img-fluid">
-                                        <p class="card-text">
-                                            @tradingCard.CardText
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </button>
+<div class="card-group btn-group row rounded p-1 mb-3">
+    @foreach (var tradingCard in Model.Cards)
+    {
+        var photoPath = "/images/" + (tradingCard.Image ?? "fow-cardback.jpg");
+    <div class="col-md-4">
+        <!-- cannot use A links, has to be button or something else, so not using bootstrap cards anymore -->
+        <div class="p-1">
+            <button class="unstyled-button btn-block" asp-controller="Card" asp-action="Index" asp-route-Id="@tradingCard.Id">
+                <h6 class="">@tradingCard.Name</h6>
+                <div class="">
+                    <img class="card-img-top" src="@photoPath" alt="Card image">
+                    <div class="img-fluid">
+                        <p class="card-text">
+                            @tradingCard.CardText
+                        </p>
                     </div>
-                }
-            </div>
+                </div>
+            </button>
+        </div>
+    </div>
+    }
+</div>
         }
     }
     else
@@ -154,43 +153,42 @@
 @section Scripts
 {
     <script>
-    this.history.forward(-1);
-    $(document).ready(function () {
-        $('#card-name').on('input', function () {
-            var word = $('#card-name').val();
-            var data = JSON.stringify({
-                name: word
-            });
-            console.log(data);
-            console.log(word);
-            $.ajax({
-                url: '/CardDatabase/GetCardName',
-                type: 'POST',
-                data: data,
-                contentType: "application/json; charset=utf-8",
-                dataType: 'json',
-                // on success response
-                success: function (response)
-                {
-                    $("#card-list").html("");
-                    //Need to refresh the list each time a new input is put in
-                    if (response.length > 0) {
-                        $.each(response, function (index, item) {
-                            $("#card-list").append('<li>' + item.name + '</li>');
-                        });
-                    }
-                    else if (response == "") {
+        this.history.forward(-1);
+        $(document).ready(function () {
+            $('#card-name').on('input', function () {
+                var word = $('#card-name').val();
+                var data = JSON.stringify({
+                    name: word
+                });
+                console.log(data);
+                console.log(word);
+                $.ajax({
+                    url: '/CardDatabase/GetCardName',
+                    type: 'POST',
+                    data: data,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    // on success response
+                    success: function (response) {
                         $("#card-list").html("");
+                        //Need to refresh the list each time a new input is put in
+                        if (response.length > 0) {
+                            $.each(response, function (index, item) {
+                                $("#card-list").append('<li>' + item.name + '</li>');
+                            });
+                        }
+                        else if (response == "") {
+                            $("#card-list").html("");
+                        }
+                        else {
+                            $("#card-list").html("No cards found");
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("Some error encountered." + xhr.status);
                     }
-                    else {
-                        $("#card-list").html("No cards found");
-                    }
-                },
-                error: function (xhr) {
-                    alert("Some error encountered." + xhr.status);
-                }
+                });
             });
-        });
-    })
+        })
     </script>
 }
