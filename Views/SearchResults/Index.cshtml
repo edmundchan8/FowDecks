@@ -124,6 +124,7 @@
     @foreach (var tradingCard in Model.Cards)
     {
         var photoPath = "/images/" + (tradingCard.Image ?? "fow-cardback.jpg");
+
     <div class="col-md-4">
         <!-- cannot use A links, has to be button or something else, so not using bootstrap cards anymore -->
         <div class="p-1">
@@ -153,7 +154,6 @@
 @section Scripts
 {
     <script>
-        this.history.forward(-1);
         $(document).ready(function () {
             $('#card-name').on('input', function () {
                 var word = $('#card-name').val();
